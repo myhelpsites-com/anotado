@@ -1,33 +1,52 @@
-const { app, BrowserWindow, contextBridge  } = require('electron');
-const { join } = require('path');
-const { format } = require('url');
+const { app, BrowserWindow, ipcMain } = require('electron');
+const path = require('path');
+const db = require('./db/useData');
 
 function createWindow() {
-  // Cria uma janela de navegação
-  const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+  const mainWindow = new BrowserWindow({
+    width: 1300,
+    height: 800,
+    maximized: true,
     webPreferences: {
-      nodeIntegration: true
-    }
+      nodeIntegration: true,
+      contextIsolation: false,
+      devTools: true
+    },
   });
 
-  // Verifica se está no ambiente de desenvolvimento ou de produção
-  const isDev = process.env.NODE_ENV === 'development';
+  mainWindow.loadFile('src/index.html');
 
-  if (isDev) {
-    // Carrega a URL do servidor de desenvolvimento do Next.js
-    win.loadURL('http://localhost:3000/');
-} else {
-      win.loadURL('http://localhost:3000/');
-    // Carrega o arquivo index.html gerado pelo Next.js
-    // win.loadURL(format({
-    //   pathname: join(__dirname, '.next', 'renderer', 'index.html'),
-    //   protocol: 'file:',
-    //   slashes: true
-    // }));
-  }
+  ipcMain.on('save-value', (event, value) => {
+    // Salva o valor recebido no banco de dados
+    db.run("INSERT INTO inputs (value) VALUES (?)", value, (err) => {
+      if (err) {
+        console.error(err);
+      } else {
+        console.log('Valor inserido com sucesso!');
+      }
+    });
+  });
+  ipcMain.on('get-all', (event, value) => {
+    // Salva o valor recebido no banco de dados
+    return db.all("SELECT * FROM inputs", (err, rows) => {
+        if (err) {
+        } else {
+          return rows.forEach((row) => {
+            return row.value
+          });
+        }
+      });
+  });
 }
 
-// Quando o Electron terminar de inicializar e estiver pronto para criar janelas do navegador.
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  createWindow();
+
+  app.on('activate', function () {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  });
+});
+
+app.on('window-all-closed', function () {
+  if (process.platform !== 'darwin') app.quit();
+});

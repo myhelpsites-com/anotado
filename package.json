@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "concurrently \"npm run next\" \"npm run electron-forge\"",
-    "next": "cd next && npm run dev",
+    "next": "cd next && npm run start",
     "electron": "electron .",
     "package": "electron-forge package",
     "make": "electron-forge make",
@@ -27,7 +27,8 @@
     "electron-squirrel-startup": "^1.0.0",
     "next": "^13.4.4",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "sqlite3": "^5.1.6"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.1.1",
