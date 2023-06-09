@@ -2,22 +2,29 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const db = require('./db/useData');
 
+let mainWindow = null;
+
 function createWindow() {
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1300,
     height: 800,
+    maximizable: true,
     maximized: true,
+    
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      devTools: true
+      devTools: true,
+      allowRunningInsecureContent: false,
+      webSecurity: true,
+      newWindow: false, // Desativa a abertura de nova janela
     },
   });
 
   mainWindow.loadFile('src/index.html');
 
   ipcMain.on('save-value', (event, value) => {
-    // Salva o valor recebido no banco de dados
+    // Salvar o valor recebido no banco de dados
     db.run("INSERT INTO inputs (value) VALUES (?)", value, (err) => {
       if (err) {
         console.error(err);
@@ -26,16 +33,16 @@ function createWindow() {
       }
     });
   });
-  ipcMain.on('get-all', (event, value) => {
-    // Salva o valor recebido no banco de dados
-    return db.all("SELECT * FROM inputs", (err, rows) => {
-        if (err) {
-        } else {
-          return rows.forEach((row) => {
-            return row.value
-          });
-        }
-      });
+
+  ipcMain.on('get-all', async (event, value) => {
+    try {
+      const rows = await db.all("SELECT * FROM inputs");
+      const values = rows.map(row => row.value);
+      event.reply('all-values', values);
+    } catch (err) {
+      console.error(err);
+      event.reply('all-values', []);
+    }
   });
 }
 
