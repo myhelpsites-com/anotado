@@ -1,4 +1,8 @@
-function About() {
+function About(props) {
+    React.useEffect(() => {
+        console.log(props, "---------->")
+    }, []);
+
     return (
         <div>
             <h1>About</h1>
