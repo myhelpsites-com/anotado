@@ -6,7 +6,8 @@ function About(props) {
     return (
         <div>
             <h1>About</h1>
-            <a href="#">home</a>
+            <Link href={"#"}>home</Link>
+
         </div>
     )
 }
