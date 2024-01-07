@@ -1,15 +1,24 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Salvar Dados</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="Description" content="Enter your description here" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <title>Anotado</title>
 </head>
-
 <body>
     <div id="root"></div>
 
+    <!-- helpers -->
     <script src="../helpers/decodeQueryString.js"></script>
+
+    <!-- database -->
+    <script src="../db/get.js"></script>
 
     <!-- react -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
@@ -18,8 +27,12 @@
     <!-- babel -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
 
-    <!-- jsx -->
+    <!-- components -->
     <script type="text/babel" src="./components/link/index.js"></script>
+    <script type="text/babel" src="./components/sideNav/index.js"></script>
+    <script type="text/babel" src="./components/layout/index.js"></script>
+    
+    <!-- pages -->
     <script type="text/babel" src="./pages/home/index.js"></script>
     <script type="text/babel" src="./pages/about/index.js"></script>
     <script type="text/babel" src="./pages/index.js"></script>
